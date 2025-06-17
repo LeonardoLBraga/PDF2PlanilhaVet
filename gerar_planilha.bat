@@ -5,41 +5,36 @@ echo ======================================
 echo Iniciando geração da planilha
 echo ======================================
 
-REM Verifica se o Python está instalado
-python --version >nul 2>&1
-IF %ERRORLEVEL% NEQ 0 (
-    echo ERRO: Python não está instalado ou não está no PATH.
+REM Caminho para o executável gerado pelo PyInstaller
+set EXECUTAVEL=gerar_planilha.exe
+
+REM Verifica se o executável existe
+if not exist %EXECUTAVEL% (
+    echo ERRO: O executável "%EXECUTAVEL%" não foi encontrado.
+    echo Certifique-se de que ele esteja na mesma pasta que este .bat
     pause
     exit /b
 )
 
 echo.
-echo Instalando dependências necessárias...
-pip install --quiet pdfplumber pandas openpyxl
+echo Executando o programa...
+
+REM Executa o .exe e redireciona erros para o console
+%EXECUTAVEL%
+set ERRO=%ERRORLEVEL%
 
 echo.
-echo ======================================
-echo Executando script Python...
-python gerar_planilha.py
-
-echo.
-echo ======================================
-echo Se os dados não estiverem corretos,
-echo verifique a imagem debug_posicoes.png
-echo ======================================
-
-REM Verifica se o script Python teve erro
-IF %ERRORLEVEL% NEQ 0 (
-    echo.
+if %ERRO% NEQ 0 (
     echo ======================================
     echo Opa! Algo deu errado 😢
+    echo Código de erro: %ERRO%
     echo Verifique se os arquivos PDF estão corretos
-    echo ou se o script teve algum problema.
+    echo ou se o executável teve algum problema.
     echo ======================================
-) ELSE (
-    echo.
+) else (
     echo ======================================
     echo Planilha gerada com sucesso! ✅
     echo ======================================
 )
+
 pause
