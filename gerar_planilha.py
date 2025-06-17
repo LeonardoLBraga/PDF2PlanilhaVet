@@ -4,8 +4,29 @@ import re
 import os
 import sys
 
+# TAMANHO_PADRAO_A4 = (595.28, 841.89)
+TAMANHO_ESPERADO = (841.92, 1191.12)
+
 dados = []
 pasta_pdfs = "arquivos"
+ 
+
+def verifica_tamanho_da_pagina(primeira_pagina):
+    largura = primeira_pagina.width
+    altura = primeira_pagina.height
+
+    print("Largura: ", largura, "\nAltura: ", altura)
+
+    # tolerância de margem, para pequenas variações
+    margem = 5
+
+    if (abs(largura - TAMANHO_ESPERADO[0]) > margem or
+        abs(altura - TAMANHO_ESPERADO[1]) > margem):
+        print(
+            f"Erro: o tamanho da página é {largura:.2f} x {altura:.2f}, "
+            f"mas o esperado era {TAMANHO_ESPERADO[0]} x {TAMANHO_ESPERADO[1]}"
+        )
+        sys.exit(1)
 
 
 def extrair_dados_por_posicao(pagina):
@@ -52,6 +73,9 @@ try:
         caminho_pdf = os.path.join(pasta_pdfs, arquivo)
         with pdfplumber.open(caminho_pdf) as pdf:
             primeira_pagina = pdf.pages[0]
+
+            verifica_tamanho_da_pagina(primeira_pagina)
+
             nome_paciente, data_exame, procedimento = extrair_dados_por_posicao(primeira_pagina)
             dados.append({
                 "Exames": f"{procedimento} - {nome_paciente}",
