@@ -6,7 +6,7 @@
 
 - Extrai o nome do paciente, data do exame e tipo de exame por posição no PDF
 - Processa múltiplos PDFs de uma vez (em lote)
-- Gera uma planilha `planilha.xlsx` pronta para uso
+- Gera uma planilha `dd/mm/aaaa.xlsx` pronta para uso com o nome sendo a data de quando ela foi gerada
 - Automatização via `.bat` para rodar com duplo clique
 - Instala automaticamente as dependências necessárias se não estiverem presentes
 
@@ -17,8 +17,7 @@ PDF2PlanilhaVet/
 ├── gerar_planilha.py       # Script Python principal
 ├── gerar_planilha.bat      # Script .bat para rodar tudo com 2 cliques
 ├── arquivos/               # Coloque aqui os PDFs dos exames
-├── planilha.xlsx           # Arquivo Excel gerado automaticamente
-└── README.md
+├── planilhas_geradas/      # Arquivos Excel gerados automaticamente
 ```
 
 ## ⚙️ Pré-requisitos
@@ -34,7 +33,7 @@ As dependências necessárias serão instaladas automaticamente ao rodar o `.bat
 
 1. Coloque seus arquivos `.pdf` de exames na pasta `arquivos/`.
 2. Dê **duplo clique** em `gerar_planilha.bat`.
-3. A planilha `planilha_gerada.xlsx` será gerada com os dados extraídos.
+3. A planilha `dd/mm/aaaa.xlsx` será gerada com os dados extraídos.
 
 ## ⚠️ Possíveis erros tratados
 
