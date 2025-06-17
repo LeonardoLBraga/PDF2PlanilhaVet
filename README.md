@@ -16,18 +16,10 @@
 PDF2PlanilhaVet/
 ├── gerar_planilha.py       # Script Python principal
 ├── gerar_planilha.bat      # Script .bat para rodar tudo com 2 cliques
+├── gerar_planilha.exe      # Executável gerado para não precisar instalar dependências
 ├── arquivos/               # Coloque aqui os PDFs dos exames
 ├── planilhas_geradas/      # Arquivos Excel gerados automaticamente
 ```
-
-## ⚙️ Pré-requisitos
-
-- Python 3.8 ou superior
-- Pip configurado no PATH
-
-As dependências necessárias serão instaladas automaticamente ao rodar o `.bat`, mas você também pode instalar manualmente com:
-
-```pip install pdfplumber pandas openpyxl```
 
 ## 🚀 Como usar
 
