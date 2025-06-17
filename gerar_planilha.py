@@ -51,13 +51,13 @@ try:
     for arquivo in arquivos_pdf:
         caminho_pdf = os.path.join(pasta_pdfs, arquivo)
         with pdfplumber.open(caminho_pdf) as pdf:
-            for pagina in pdf.pages:
-                nome_paciente, data_exame, procedimento = extrair_dados_por_posicao(pagina)
-                dados.append({
-                    "Exames": f"{procedimento} - {nome_paciente}",
-                    "Data": data_exame,
-                    "Valor": ""
-                })
+            primeira_pagina = pdf.pages[0]
+            nome_paciente, data_exame, procedimento = extrair_dados_por_posicao(primeira_pagina)
+            dados.append({
+                "Exames": f"{procedimento} - {nome_paciente}",
+                "Data": data_exame,
+                "Valor": ""
+            })
 
     df = pd.DataFrame(dados)
     df.to_excel("planilha_gerada.xlsx", index=False)
