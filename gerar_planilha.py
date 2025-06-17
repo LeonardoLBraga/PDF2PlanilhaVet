@@ -1,5 +1,6 @@
 import pdfplumber
 import pandas as pd
+from datetime import datetime
 import re
 import os
 import sys
@@ -9,6 +10,7 @@ TAMANHO_ESPERADO = (841.92, 1191.12)
 
 dados = []
 pasta_pdfs = "arquivos"
+pasta_saida = "planilhas_geradas"
  
 
 def verifica_tamanho_da_pagina(primeira_pagina):
@@ -84,7 +86,14 @@ try:
             })
 
     df = pd.DataFrame(dados)
-    df.to_excel("planilha_gerada.xlsx", index=False)
+    os.makedirs(pasta_saida, exist_ok=True)
+
+    data_hoje = datetime.now().strftime("%Y-%m-%d")
+    nome_arquivo = f"{data_hoje}.xlsx"
+    caminho_completo = os.path.join(pasta_saida, nome_arquivo)
+
+    df.to_excel(caminho_completo, index=False)
+    print(f"Planilha salva em: {caminho_completo}")
 
 except Exception as e:
     print(f"Erro: {str(e)}")
