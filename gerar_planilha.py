@@ -15,7 +15,7 @@ def verifica_tamanho_da_pagina(primeira_pagina):
     largura = primeira_pagina.width
     altura = primeira_pagina.height
 
-    print("Largura: ", largura, "\nAltura: ", altura)
+    # print("Largura: ", largura, "\nAltura: ", altura)
 
     # tolerância de margem, para pequenas variações
     margem = 5
@@ -48,7 +48,7 @@ def extrair_dados_por_posicao(pagina):
     pagina.to_image().draw_rect(caixa_paciente).draw_rect(caixa_data).draw_rect(caixa_procedimento).save("debug_posicoes.png")
 
     texto_paciente = re.sub(r"Paciente:\s*", "", texto_paciente).strip().splitlines()[0] if texto_paciente else ""
-    data = texto_data.strip().splitlines()[1] if texto_data else ""
+    data = re.sub(r"Data do exame:\s*", "", texto_data).strip().splitlines()[0] if texto_data else ""
     procedimento = texto_procedimento.strip().splitlines()[0] if texto_procedimento else ""
     
     print("Paciente: " + texto_paciente, " - Data: " + data, " - Procedimento: " + procedimento)
