@@ -2,33 +2,31 @@
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
-set "EXE=gerar_planilha.exe"
-set "ZIP=gerar_planilha.zip"
-set "URL=https://github.com/LeonardoLBraga/PDF2PlanilhaVet/releases/download/v1.0/%ZIP%"
-
 echo ======================================
 echo Iniciando geração da planilha...
 echo ======================================
 
-REM Verifica se o executável já existe
-if not exist %EXE% (
+if not exist "gerar_planilha.exe" (
     echo Executável não encontrado.
 
-    echo Baixando %ZIP% de %URL% ...
-    certutil -urlcache -split -f %URL% %ZIP%
+    echo Baixando ...
+    certutil -urlcache -split -f "https://github.com/LeonardoLBraga/PDF2PlanilhaVet/releases/download/v1.0/gerar_planilha.zip" "gerar_planilha.zip"
     
-    if not exist %ZIP% (
+    if not exist "gerar_planilha.zip" (
         echo ERRO: Falha ao baixar o ZIP.
         pause
         exit /b
     )
 )
 
-echo Arquivo baixado. Por favor, descompacte o arquivo %ZIP% manualmente.
+echo Arquivo baixado. Por favor, descompacte o arquivo zip manualmente.
 pause
 
 echo.
 echo Executando o programa...
+
+gerar_planilha.exe
+
 set ERRO=%ERRORLEVEL%
 
 echo.
