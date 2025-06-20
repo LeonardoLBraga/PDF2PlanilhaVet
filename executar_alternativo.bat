@@ -11,25 +11,24 @@ echo Iniciando geração da planilha...
 echo ======================================
 
 REM Verifica se o executável já existe
-if not exist "%EXE%" (
+if not exist %EXE% (
     echo Executável não encontrado.
 
     echo Baixando %ZIP% de %URL% ...
-    certutil -urlcache -split -f "%URL%" "%ZIP%"
+    certutil -urlcache -split -f %URL% %ZIP%
     
-    if not exist "%ZIP%" (
+    if not exist %ZIP% (
         echo ERRO: Falha ao baixar o ZIP.
         pause
         exit /b
     )
 )
 
-echo Arquivo baixado. Por favor, descompacte o arquivo "%ZIP%" manualmente.
+echo Arquivo baixado. Por favor, descompacte o arquivo %ZIP% manualmente.
 pause
 
 echo.
 echo Executando o programa...
-"%EXE%"
 set ERRO=%ERRORLEVEL%
 
 echo.
