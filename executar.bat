@@ -10,12 +10,11 @@ echo ======================================
 echo Iniciando geração da planilha...
 echo ======================================
 
-REM Verifica se o executável já existe
-if not exist "%EXE%" (
+if not exist "!EXE!" (
     echo Executável não encontrado.
-
     echo Verificando conexão com GitHub...
-    powershell -Command "try { $r = Invoke-WebRequest -Uri '%URL%' -Method Head -UseBasicParsing -TimeoutSec 10; if ($r.StatusCode -ne 200) { exit 1 } } catch { exit 1 }"
+
+    powershell -Command "try { $r = Invoke-WebRequest -Uri '!URL!' -Method Head -UseBasicParsing -TimeoutSec 10; if ($r.StatusCode -ne 200) { exit 1 } } catch { exit 1 }"
 
     if errorlevel 1 (
         echo ERRO: Não foi possível acessar o link do ZIP.
@@ -25,16 +24,17 @@ if not exist "%EXE%" (
 
     echo Conectado com sucesso.
     echo Baixando arquivo...
-    powershell -Command "Invoke-WebRequest -Uri '%URL%' -OutFile '%ZIP%'"
+    powershell -Command "Invoke-WebRequest -Uri '!URL!' -OutFile '!ZIP!'"
 
-    if not exist "%ZIP%" (
+    if not exist "!ZIP!" (
         echo ERRO: Falha ao baixar o ZIP.
         pause
         exit /b
     )
 
     echo Descompactando...
-    powershell -Command "Expand-Archive -Path '%ZIP%' -DestinationPath '.' -Force"
+    powershell -Command "Expand-Archive -Path '!ZIP!' -DestinationPath '.' -Force"
+
     if errorlevel 1 (
         echo ERRO ao descompactar o arquivo.
         pause
@@ -43,7 +43,7 @@ if not exist "%EXE%" (
 )
 
 echo Executando o programa...
-"%EXE%"
+"!EXE!"
 set ERRO=%ERRORLEVEL%
 
 echo.
