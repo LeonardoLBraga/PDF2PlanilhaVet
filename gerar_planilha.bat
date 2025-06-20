@@ -1,54 +1,36 @@
 @echo off
 chcp 65001 >nul
-
 setlocal
 
 echo ======================================
 echo Iniciando geração da planilha
 echo ======================================
 
-REM Nome do executável desejado
-set EXECUTAVEL=gerar_planilha.exe
+REM Caminho absoluto do diretório onde está este .bat
+set "DIR_ATUAL=%~dp0"
+set "EXE_CAMINHO=%DIR_ATUAL%gerar_planilha.exe"
 
-REM Verifica se o executável existe na pasta atual
-if not exist "%EXECUTAVEL%" (
-    echo Executável não encontrado. Criando...
-    
-    REM Verifica se o PyInstaller está instalado
-    pip show pyinstaller >nul 2>&1
-    if %ERRORLEVEL% NEQ 0 (
-        echo PyInstaller nao encontrado. Instalando...
-        pip install pyinstaller
-    )
+REM Remove aspas duplas extras se houver
+set EXE_CAMINHO=%EXE_CAMINHO:"=%
 
-    REM Roda o PyInstaller para gerar o exe NA PASTA ATUAL
-    pyinstaller --onefile --distpath . --workpath build --specpath build gerar_planilha.py
-
-    REM Verifica se o exe foi criado
-    if not exist "%EXECUTAVEL%" (
-        echo ERRO: Falha ao criar o executavel.
-        pause
-        exit /b
-    )
-    echo Executavel criado com sucesso.
-) else (
-    echo Executavel encontrado.
+REM Verifica se o .exe existe
+if not exist "%EXE_CAMINHO%" (
+    echo ERRO: O executável gerar_planilha.exe nao foi encontrado em: 
+    echo %EXE_CAMINHO%
+    pause
+    exit /b
 )
 
-echo.
 echo Executando o programa...
-
-REM Executa o .exe e captura o código de saída
-"%EXECUTAVEL%"
+"%EXE_CAMINHO%"
 set ERRO=%ERRORLEVEL%
 
 echo.
 if %ERRO% NEQ 0 (
     echo ======================================
     echo Opa! Algo deu errado 😢
-    echo Codigo de erro: %ERRO%
-    echo Verifique se os arquivos PDF estão corretos
-    echo ou se o executavel teve algum problema.
+    echo Código de erro: %ERRO%
+    echo Verifique os arquivos PDF ou se houve falha no executável.
     echo ======================================
 ) else (
     echo ======================================
