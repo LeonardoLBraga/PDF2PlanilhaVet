@@ -14,23 +14,18 @@ REM Verifica se o executável já existe
 if not exist "%EXE%" (
     echo Executável não encontrado.
 
-    echo Baixando o arquivo ZIP...
-    curl -L -o "%ZIP%" "%URL%"
+    echo Baixando %ZIP% de %URL% ...
+    certutil -urlcache -split -f "%URL%" "%ZIP%"
     
     if not exist "%ZIP%" (
         echo ERRO: Falha ao baixar o ZIP.
         pause
         exit /b
     )
-
-    echo Descompactando...
-    tar -xf "%ZIP%" >nul 2>&1
-    if errorlevel 1 (
-        echo ERRO ao descompactar o ZIP.
-        pause
-        exit /b
-    )
 )
+
+echo Arquivo baixado. Por favor, descompacte o arquivo "%ZIP%" manualmente.
+pause
 
 echo.
 echo Executando o programa...
