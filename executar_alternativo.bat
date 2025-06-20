@@ -1,17 +1,12 @@
 @echo off
-chcp 65001 >nul
 setlocal enabledelayedexpansion
 
-echo ======================================
 echo Iniciando geração da planilha...
-echo ======================================
 
 if not exist "gerar_planilha.exe" (
     echo Executável não encontrado.
 
-    echo Baixando ...
-    certutil -urlcache -split -f "https://github.com/LeonardoLBraga/PDF2PlanilhaVet/releases/download/v1.0/gerar_planilha.zip" "gerar_planilha.zip"
-    
+    powershell -Command "try { $r = Invoke-WebRequest -Uri https://github.com/LeonardoLBraga/PDF2PlanilhaVet/releases/download/v1.0/gerar_planilha.zip -Method Head -UseBasicParsing -TimeoutSec 10; if ($r.StatusCode -ne 200) { exit 1 } } catch { exit 1 }"
     if not exist "gerar_planilha.zip" (
         echo ERRO: Falha ao baixar o ZIP.
         pause
