@@ -52,6 +52,8 @@ try:
 
     data_frame_da_planilha.to_excel(caminho_completo, index=False)
     print(f"Planilha salva em: {caminho_completo}")
+    print("Tudo pronto! Relatório gerado com sucesso.")
+    input("Pressione Enter para sair...")
 
 except Exception as e:
     print(f"Erro: {str(e)}")
