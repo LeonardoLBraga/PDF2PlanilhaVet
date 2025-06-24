@@ -4,7 +4,8 @@ from datetime import datetime
 import os
 import sys
 
-from functions import *
+from utils.functions import *
+from extratores.fabrica import escolher_extrator
 
 dados_da_planilha = []
 pasta_pdfs = "arquivos"
@@ -25,6 +26,13 @@ try:
         print(f'Erro: Nenhum arquivo PDF encontrado na pasta "{pasta_pdfs}".')
         sys.exit(1)
 
+    valores_dos_exames_dict = get_valores_do_pdf(caminho_valores)
+    valores_normalizados_dict = {
+        normalizar(nome_exame): valor_exame
+        for nome_exame, valor_exame in valores_dos_exames_dict.items()
+    }
+    # print(valores_normalizados_dict)
+
     for arquivo in arquivos_pdf:
         caminho_pdf = os.path.join(pasta_pdfs, arquivo)
         with pdfplumber.open(caminho_pdf) as pdf:
@@ -33,15 +41,14 @@ try:
             if not verifica_tamanho_da_pagina(primeira_pagina):
                 continue
 
-            nome_paciente, data_exame, procedimento = extrair_dados_por_posicao(primeira_pagina)
+            extrator = escolher_extrator(caminho_pdf)
 
-            valor = get_valor_by_procedimento(procedimento, caminho_valores)
-
-            dados_da_planilha.append({
-                "Exames": f"{procedimento} - {nome_paciente}",
-                "Data": data_exame,
-                "Valor": valor
-            })
+            try:
+                linhas = extrator.extrair(primeira_pagina, valores_normalizados_dict)
+                dados_da_planilha.extend(linhas)
+            except Exception as e:
+                print(f"Erro ao extrair dados de {arquivo}: {e}")
+                continue
 
     data_frame_da_planilha = pd.DataFrame(dados_da_planilha)
     os.makedirs(pasta_saida, exist_ok=True)
