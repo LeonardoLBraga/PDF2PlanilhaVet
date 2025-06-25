@@ -66,7 +66,7 @@ PDF2PlanilhaVet/
 |----------------------------------|------------|----------|
 | Fosfatase Alcalina - Meg         | 06/04/2024 | R$ 20,00 |
 | A.L.T. (TGP) - Meg               | 06/04/2024 | R$ 20,00 |
-| Pesquisa de hemoparasitas - Meg | 26/04/2025 | R$ 30,00 |
+| Pesquisa de hemoparasitas - Meg  | 26/04/2025 | R$ 30,00 |
 
 ---
 

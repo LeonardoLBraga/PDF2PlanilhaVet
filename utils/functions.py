@@ -118,3 +118,26 @@ def verifica_se_tem_tabela(caminho_pdf):
             return True
     return False
 
+
+def calcula_total(dados_da_planilha):
+    total = 0
+
+    for item in dados_da_planilha:
+        valor_str = item['Valor'].replace('R$', '').replace(',', '.').strip()
+        if valor_str:
+            try:
+                total += float(valor_str)
+            except ValueError:
+                pass  # ignora se não for número válido
+    
+    total_formatado = f'R$ {total:.2f}'.replace('.', ',')
+
+    dados_da_planilha.append({
+        'Exames': 'TOTAL',
+        'Data': '',
+        'Valor': total_formatado
+    })
+
+    print("Total: ", total_formatado)
+
+    return dados_da_planilha

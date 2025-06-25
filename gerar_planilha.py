@@ -50,7 +50,9 @@ try:
                 print(f"Erro ao extrair dados de {arquivo}: {e}")
                 continue
 
-    data_frame_da_planilha = pd.DataFrame(dados_da_planilha)
+    dados_da_planilha_com_total = calcula_total(dados_da_planilha)
+
+    data_frame_da_planilha = pd.DataFrame(dados_da_planilha_com_total)
     os.makedirs(pasta_saida, exist_ok=True)
 
     data_hoje = datetime.now().strftime("%Y-%m-%d")
