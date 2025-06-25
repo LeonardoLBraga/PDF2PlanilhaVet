@@ -7,7 +7,7 @@ set "ZIP=gerar_planilha.zip"
 set "URL=https://github.com/LeonardoLBraga/PDF2PlanilhaVet/releases/download/v1.0/%ZIP%"
 
 echo ======================================
-echo Iniciando geração da planilha...
+echo Verificando se o executável já existe...
 echo ======================================
 
 if not exist "!EXE!" (
@@ -40,22 +40,10 @@ if not exist "!EXE!" (
         pause
         exit /b
     )
-)
 
-echo Executando o programa...
-"!EXE!"
-set ERRO=%ERRORLEVEL%
-
-echo.
-if %ERRO% NEQ 0 (
-    echo ======================================
-    echo Algo deu errado 😢
-    echo Código de erro: %ERRO%
-    echo ======================================
+    echo Executável pronto para uso!
 ) else (
-    echo ======================================
-    echo Planilha gerada com sucesso! ✅
-    echo ======================================
+    echo Executável já está presente. Nenhum download necessário.
 )
 
 pause
