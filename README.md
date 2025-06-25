@@ -10,8 +10,6 @@
 - 📥 Extração de nome do paciente, data e procedimentos
 - 🔄 Processa múltiplos PDFs em lote
 - 📊 Geração automática de planilhas `.xlsx` nomeadas pela data atual
-- ⚙️ Execução simples com **duplo clique** via `.bat` (WIP)
-- 📦 Instalação automática de dependências se necessário (WIP)
 - 📌 Executável `.exe` incluso para uso sem precisar instalar Python
 
 ---
@@ -22,16 +20,16 @@
 PDF2PlanilhaVet/
 ├── arquivos/                 # PDFs dos exames
 ├── planilhas_geradas/        # Planilhas geradas automaticamente
+├── pdf_valores_exames/       
+│   ├── valores.pdf           # PDF com planilha de valores.
 ├── extratores/               # Módulo com extratores base e especializados
 │   ├── base.py               # Interface base do extrator
 |   ├── fabrica.py            # O uso do padrão Strategy com fabrica.py
 │   ├── com_tabela.py         # Extrator para PDFs com tabela
 │   └── sem_tabela.py         # Extrator para PDFs sem tabela
 ├── utils/                    # Funções auxiliares
-├── img/                      # Imagens de debug (opcional)
 ├── gerar_planilha.py         # Script principal
-├── executar.bat              # Script .bat principal (recomendo)
-├── executar_alternativo.bat  # Versão alternativa (sem .exe)
+├── download_executavel.bat   # Script .bat para download do executável
 ├── README.md
 ```
 
@@ -41,8 +39,9 @@ PDF2PlanilhaVet/
 
 1. Copie seus arquivos `.pdf` de exames para a pasta `arquivos/`.
 2. Copie o `.pdf` de valores dos exames para a pasta `pdf_valores_exames` com o nome de `valores`, ficando assim: `pdf_valores_exames/valores.pdf`
-3. Dê **duplo clique** em `executar.bat` (usa o `.exe`) ou `executar_alternativo.bat` (roda com Python).
-4. A planilha será criada na pasta `planilhas_geradas/`, com o nome no formato `dd-mm-aaaa.xlsx`.
+3. Dê **duplo clique** em `download_executavel.bat` para baixar o executável, ou baixe manualmente em `https://github.com/LeonardoLBraga/PDF2PlanilhaVet/releases`.
+4. Descompacte o `gerar_planilha.zip` e dê **duplo clique** em `gerar_planilha.exe`
+5. A planilha será criada na pasta `planilhas_geradas/`, com o nome no formato `dd-mm-aaaa.xlsx`.
 
 ---
 
