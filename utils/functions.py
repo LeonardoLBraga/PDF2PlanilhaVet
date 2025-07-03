@@ -28,7 +28,7 @@ def normalizar(texto):
         return ""
     texto = unicodedata.normalize("NFKD", texto).encode("ASCII", "ignore").decode("utf-8")
     texto = texto.lower()
-    texto = re.sub(r"[^a-z0-9\s]", "", texto)
+    texto = re.sub(r"[^a-z0-9]+", " ", texto)
     texto = texto.strip()
     return texto
 
@@ -92,11 +92,13 @@ def get_valor_by_procedimento(procedimento, valores):
 
     # Tenta encontrar sinônimo exato
     if procedimento_norm in SINONIMOS:
-        chave_certa = normalizar(SINONIMOS[procedimento_norm])
-        if chave_certa in valores:
-            valor = valores[chave_certa]
-            print(f"Match via sinônimo: {procedimento_norm} → {chave_certa} → {valor}")
+        sinonimo = SINONIMOS[procedimento_norm]
+        if sinonimo in valores:
+            valor = valores[sinonimo]
+            print(f"Match via sinônimo: {procedimento_norm} → {sinonimo} → {valor}")
             return valor
+        else:
+            print(f"Sinônimo '{sinonimo}' não encontrado em valores: {list(valores.keys())}")
 
     # Se não houver sinônimo, tenta por similaridade
     candidatos = difflib.get_close_matches(procedimento_norm, valores.keys(), n=1, cutoff=0.6)
@@ -129,7 +131,7 @@ def calcula_total(dados_da_planilha):
                 total += float(valor_str)
             except ValueError:
                 pass  # ignora se não for número válido
-    
+
     total_formatado = f'R$ {total:.2f}'.replace('.', ',')
 
     dados_da_planilha.append({
