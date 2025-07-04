@@ -1,8 +1,26 @@
+"""
+Extrator de dados de PDFs que possuem tabelas estruturadas com procedimentos.
+
+Este extrator utiliza tabelas extraídas da página para identificar os procedimentos.
+"""
+
 from extratores.base import ExtratorBase
 from utils.functions import extrair_nome_e_data, get_valor_by_procedimento
 
 class ExtratorComTabela(ExtratorBase):
+    """Extrator para PDFs com tabela de procedimentos."""
+
     def extrair(self, pagina, valores):
+        """
+        Extrai dados da página com base em uma tabela de procedimentos.
+
+        Args:
+            pagina: Objeto da página do PDF.
+            valores (dict): Dicionário com valores por procedimento.
+
+        Returns:
+            list[dict]: Lista contendo os dados formatados.
+        """
         nome, data = extrair_nome_e_data(pagina)
 
         try:
@@ -10,7 +28,7 @@ class ExtratorComTabela(ExtratorBase):
         except Exception as e:
             print(f"Erro ao extrair tabela: {e}")
             return []
-        
+
         linhas = []
         for procedimento in procedimentos:
             linhas.append({
@@ -19,8 +37,20 @@ class ExtratorComTabela(ExtratorBase):
                 "Valor": get_valor_by_procedimento(procedimento, valores)
             })
         return linhas
-    
+
     def extrair_procedimentos_da_tabela(self, pagina):
+        """
+        Extrai os nomes dos procedimentos da primeira tabela encontrada na página.
+
+        Args:
+            pagina: Objeto da página do PDF.
+
+        Returns:
+            list[str]: Lista de nomes de procedimentos.
+
+        Raises:
+            ValueError: Se nenhuma tabela for encontrada.
+        """
         tabelas = pagina.extract_tables()
         if not tabelas:
             raise ValueError("Nenhuma tabela encontrada na página.")
