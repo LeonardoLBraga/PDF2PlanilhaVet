@@ -120,9 +120,9 @@ pyinstaller --onefile gerar_planilha.py --distpath .
 
 ---
 
-## 📜 Licença
+## 📄 License
 
-Este projeto é gratuito para uso pessoal ou comercial. Nenhuma garantia é fornecida.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
