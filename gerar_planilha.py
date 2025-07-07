@@ -14,8 +14,6 @@ Pré-requisitos:
 """
 
 import pdfplumber
-import pandas as pd
-from datetime import datetime
 import os
 import sys
 
@@ -64,20 +62,16 @@ try:
                 print(f"Erro ao extrair dados de {arquivo}: {e}")
                 continue
 
-    # Calcula o total e prepara DataFrame
     dados_da_planilha_com_total = calcula_total(dados_da_planilha)
-    data_frame_da_planilha = pd.DataFrame(dados_da_planilha_com_total)
-    os.makedirs(pasta_saida, exist_ok=True)
+    data_frame_da_planilha = criar_dataframe_dados(dados_da_planilha_com_total)
+    df_resumo = gerar_resumo_por_procedimento(data_frame_da_planilha)
+    caminho_completo = definir_caminho_arquivo_excel(pasta_saida)
+    salvar_planilha_com_abas(data_frame_da_planilha, df_resumo, caminho_completo)
 
-    # Salva o arquivo Excel com nome baseado na data atual
-    data_hoje = datetime.now().strftime("%Y-%m-%d")
-    nome_arquivo = f"{data_hoje}.xlsx"
-    caminho_completo = os.path.join(pasta_saida, nome_arquivo)
-
-    data_frame_da_planilha.to_excel(caminho_completo, index=False)
     print(f"Planilha salva em: {caminho_completo}")
     print("Tudo pronto! Relatório gerado com sucesso.")
     input("Pressione Enter para sair...")
+
 
 except Exception as e:
     print(f"Erro: {str(e)}")
