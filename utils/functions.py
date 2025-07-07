@@ -11,6 +11,9 @@ Inclui funções para:
 - Calcular total de valores extraídos.
 """
 
+import os
+import pandas as pd
+from datetime import datetime
 import re
 import pdfplumber
 import difflib
@@ -213,3 +216,72 @@ def calcula_total(dados_da_planilha):
     print("Total: ", total_formatado)
 
     return dados_da_planilha
+
+
+def criar_dataframe_dados(dados_com_total: list[dict]) -> pd.DataFrame:
+    """
+    Cria um DataFrame principal com os dados extraídos dos PDFs e processados com totais.
+
+    Args:
+        dados_com_total (list[dict]): Lista de dicionários contendo os dados dos exames, já processados com totais.
+
+    Returns:
+        pd.DataFrame: DataFrame com os dados completos prontos para exportação.
+    """
+    return pd.DataFrame(dados_com_total)
+
+
+def gerar_resumo_por_procedimento(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Gera um resumo com a contagem de procedimentos a partir da coluna 'Exames',
+    extraindo apenas o nome do procedimento (parte antes do ' - '). O DataFrame original
+    não é modificado.
+
+    Args:
+        df (pd.DataFrame): DataFrame contendo os dados completos com a coluna 'Exames'.
+
+    Returns:
+        pd.DataFrame: DataFrame com duas colunas: 'Procedimento' e 'Quantidade', representando
+                      o total de ocorrências de cada procedimento.
+    """
+    df_temp = df.copy()
+    df_temp['Procedimento'] = df_temp['Exames'].str.split(' - ').str[0]
+    resumo = df_temp['Procedimento'].value_counts().reset_index()
+    resumo.columns = ['Procedimento', 'Quantidade']
+    return resumo
+
+
+def definir_caminho_arquivo_excel(pasta_saida: str) -> str:
+    """
+    Define o caminho completo para salvar o arquivo Excel com base na data atual.
+    Cria a pasta de saída, se ela ainda não existir.
+
+    Args:
+        pasta_saida (str): Caminho da pasta onde o arquivo Excel será salvo.
+
+    Returns:
+        str: Caminho completo do arquivo Excel com o nome no formato 'YYYY-MM-DD.xlsx'.
+    """
+    os.makedirs(pasta_saida, exist_ok=True)
+    data_hoje = datetime.now().strftime("%Y-%m-%d")
+    nome_arquivo = f"{data_hoje}.xlsx"
+    return os.path.join(pasta_saida, nome_arquivo)
+
+
+def salvar_planilha_com_abas(df_dados: pd.DataFrame, df_resumo: pd.DataFrame, caminho: str) -> None:
+    """
+    Salva os dados em um arquivo Excel contendo duas abas:
+    - 'Dados completos' com as informações detalhadas dos exames.
+    - 'Resumo' com a contagem de procedimentos.
+
+    Args:
+        df_dados (pd.DataFrame): DataFrame com os dados completos dos exames.
+        df_resumo (pd.DataFrame): DataFrame com o resumo de procedimentos.
+        caminho (str): Caminho completo onde o arquivo Excel será salvo.
+
+    Returns:
+        None
+    """
+    with pd.ExcelWriter(caminho, engine='openpyxl') as writer:
+        df_dados.to_excel(writer, index=False, sheet_name='Dados completos')
+        df_resumo.to_excel(writer, index=False, sheet_name='Resumo')
