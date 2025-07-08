@@ -235,16 +235,16 @@ def gerar_resumo_por_procedimento(df: pd.DataFrame) -> pd.DataFrame:
     """
     Gera um resumo com a contagem de procedimentos a partir da coluna 'Exames',
     extraindo apenas o nome do procedimento (parte antes do ' - '). O DataFrame original
-    não é modificado.
+    não é modificado. A última linha do DataFrame é ignorada (ex: totais).
 
     Args:
         df (pd.DataFrame): DataFrame contendo os dados completos com a coluna 'Exames'.
 
     Returns:
         pd.DataFrame: DataFrame com duas colunas: 'Procedimento' e 'Quantidade', representando
-                      o total de ocorrências de cada procedimento.
+                      o total de ocorrências de cada procedimento (excluindo a última linha).
     """
-    df_temp = df.copy()
+    df_temp = df.iloc[:-1].copy()
     df_temp['Procedimento'] = df_temp['Exames'].str.split(' - ').str[0]
     resumo = df_temp['Procedimento'].value_counts().reset_index()
     resumo.columns = ['Procedimento', 'Quantidade']
