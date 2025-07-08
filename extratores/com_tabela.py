@@ -5,7 +5,7 @@ Este extrator utiliza tabelas extraídas da página para identificar os procedim
 """
 
 from extratores.base import ExtratorBase
-from utils.functions import extrair_nome_e_data, get_valor_by_procedimento
+from utils.functions import extrair_nome_e_data, get_valor_by_procedimento, normalizar
 
 class ExtratorComTabela(ExtratorBase):
     """Extrator para PDFs com tabela de procedimentos."""
@@ -61,6 +61,7 @@ class ExtratorComTabela(ExtratorBase):
             if i < 2:
                 continue
             if linha and linha[0]:
-                procedimentos.append(linha[0].strip())
+                procedimento_normalizado = normalizar(linha[0])
+                procedimentos.append(procedimento_normalizado)
 
         return procedimentos

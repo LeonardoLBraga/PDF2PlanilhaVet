@@ -5,7 +5,7 @@ Este extrator utiliza coordenadas fixas para localizar o procedimento.
 """
 
 from extratores.base import ExtratorBase
-from utils.functions import extrair_nome_e_data, get_valor_by_procedimento
+from utils.functions import extrair_nome_e_data, get_valor_by_procedimento, normalizar
 
 class ExtratorSemTabela(ExtratorBase):
     """Extrator para PDFs sem tabela, utilizando posição fixa para o procedimento."""
@@ -41,4 +41,4 @@ class ExtratorSemTabela(ExtratorBase):
         """
         caixa_procedimento = (50, 280, 800, 330)
         texto_procedimento = pagina.within_bbox(caixa_procedimento).extract_text()
-        return texto_procedimento.strip().splitlines()[0] if texto_procedimento else ""
+        return normalizar(texto_procedimento.splitlines()[0]) if texto_procedimento else ""
