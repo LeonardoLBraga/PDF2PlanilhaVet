@@ -11,8 +11,11 @@
   - Nome do paciente
   - Data do exame
   - Procedimentos e seus respectivos valores
+- 🧠 Correspondência inteligente de exames usando sinônimos e similaridade
 - 🔄 Processamento em lote de diversos PDFs
-- 📊 Geração automática de planilhas `.xlsx` com o nome baseado na data atual
+- 📊 Geração automática de planilhas `.xlsx` com:
+  - Aba **"Dados completos"** com todos os exames
+  - Aba **"Resumo"** com contagem por procedimento
 - 💻 Executável `.exe` incluído para uso sem precisar instalar Python
 
 ---
@@ -30,7 +33,7 @@
         │   ├── sem_tabela.py           # Extrator para PDFs sem tabela
         │   └── fabrica.py              # Fábrica que escolhe o extrator adequado
         ├── utils/
-        │   └── functions.py            # Funções auxiliares de extração e normalização
+        │   └── functions.py            # Funções auxiliares (normalização, resumo, etc.)
         ├── gerar_planilha.py           # Script principal
         ├── download_executavel.bat     # Script para baixar o executável
         ├── README.md                   # Este arquivo
@@ -47,7 +50,9 @@
      - Extraia o `.zip`
      - Clique em `gerar_planilha.exe`
    - Ou via terminal com Python (ver seção abaixo)
-4. A planilha será gerada automaticamente em `planilhas_geradas/`, com o nome no formato `aaaa-mm-dd.xlsx`
+4. A planilha será gerada automaticamente em `planilhas_geradas/`, com o nome no formato `aaaa-mm-dd.xlsx`, contendo:
+   - Aba **"Dados completos"** com todos os exames
+   - Aba **"Resumo"** com a quantidade total de cada procedimento
 
 ---
 
@@ -56,7 +61,7 @@
 - **Nenhum!** O `.exe` funciona sem instalar nada.
 - Para uso via Python:
   - Python 3.10+
-  - Bibliotecas: `pdfplumber`, `pandas`
+  - Bibliotecas: `pdfplumber`, `pandas`, `openpyxl`
 
 ---
 
@@ -65,19 +70,32 @@
 - Verifica se há arquivos na pasta `arquivos/`
 - Verifica o tamanho esperado das páginas
 - Detecta e ignora arquivos mal formatados
-- Mostra mensagens de erro amigáveis
-- Exibe logs de sinônimos e correspondências por similaridade
+- Exibe logs detalhados com:
+  - Match por sinônimo
+  - Match por similaridade
+  - Procedimentos sem valor encontrado
 
 ---
 
 ## 🔍 Exemplo de Resultado
 
+### 📄 Aba 1 – Dados completos
+
 | Exames                           | Data       | Valor    |
 |----------------------------------|------------|----------|
-| Fosfatase Alcalina - Meg         | 06/04/2024 | R$ 20,00 |
-| A.L.T. (TGP) - Meg               | 06/04/2024 | R$ 20,00 |
-| Pesquisa de hemoparasitas - Meg  | 26/04/2025 | R$ 30,00 |
+| fosfatase alcalina - Meg         | 06/04/2024 | R$ 20,00 |
+| alt tgp - Meg                    | 06/04/2024 | R$ 20,00 |
+| pesquisa de hemoparasitas - Meg | 26/04/2025 | R$ 30,00 |
 | **TOTAL**                        |            | **R$ 70,00** |
+
+### 📄 Aba 2 – Resumo por Procedimento
+
+| Procedimento          | Quantidade |
+|-----------------------|------------|
+| alt tgp               | 3          |
+| creatinina            | 5          |
+| ureia                 | 5          |
+| fosfatase alcalina    | 3          |
 
 ---
 
@@ -88,9 +106,21 @@ A seleção do método de extração é feita dinamicamente:
 - `ExtratorComTabela`: usa a primeira tabela da página para extrair os procedimentos
 - `ExtratorSemTabela`: extrai com base em posições fixas no layout
 
-Tudo isso é implementado com o **Strategy Pattern**, facilitando a adição de novos tipos de layout no futuro.
+Implementado com o padrão de projeto **Strategy**, facilitando a adição de novos tipos de layout no futuro.
 
 ---
+
+## 🧰 Dicionário de Sinônimos
+
+Correspondência robusta com apoio de sinônimos para identificar exames mesmo com variações no nome, como:
+
+```python
+"alt tgp" → "transaminase piruvica - alt"
+"ggt", "gama gt" → "ggt - gama glutamil transferase"
+"colesterol" → "colesterol total"
+"triglicerideos" → "triglicerides"
+"raspado de pele" → "raspado pele"
+```
 
 ## 💡 Melhorias Futuras
 
@@ -120,10 +150,6 @@ pyinstaller --onefile gerar_planilha.py --distpath .
 
 ---
 
-## 📄 License
+## 📄 Licença
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-### Desenvolvido com 💚 para facilitar a rotina de clínicas veterinárias.
+Este projeto está licenciado sob a Licença MIT – veja o arquivo [LICENSE](LICENSE) para mais detalhes.
