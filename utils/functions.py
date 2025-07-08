@@ -41,7 +41,7 @@ SINONIMOS = {
 
 def normalizar(texto):
     """
-    Remove acentos, caracteres especiais e deixa o texto em minúsculo.
+    Remove acentos, pontuações, caracteres especiais e deixa o texto em minúsculo.
 
     Args:
         texto (str): Texto original.
@@ -53,9 +53,29 @@ def normalizar(texto):
         return ""
     texto = unicodedata.normalize("NFKD", texto).encode("ASCII", "ignore").decode("utf-8")
     texto = texto.lower()
+    texto = texto.replace(".", "").replace("(", "").replace(")", "")
     texto = re.sub(r"[^a-z0-9]+", " ", texto)
     texto = texto.strip()
     return texto
+
+
+def normalizar_valores(valores_raw):
+    """
+    Normaliza as chaves de um dicionário de valores de exames, removendo acentos,
+    caracteres especiais e colocando em minúsculo.
+
+    Essa função é útil para preparar o dicionário de valores que será utilizado
+    nas funções de extração e correspondência de procedimentos, garantindo que
+    as comparações sejam feitas com nomes padronizados.
+
+    Args:
+        valores_raw (dict): Dicionário original com os nomes dos exames como chaves
+                            e seus respectivos valores (ex: "R$ 20,00") como valores.
+
+    Returns:
+        dict: Novo dicionário com as chaves normalizadas e os valores mantidos.
+    """
+    return {normalizar(k): v for k, v in valores_raw.items()}
 
 
 def extrair_nome_e_data(pagina):
@@ -134,13 +154,14 @@ def get_valores_do_pdf(caminho_valores):
     return exames_dict
 
 
-def get_valor_by_procedimento(procedimento, valores):
+def get_valor_by_procedimento(procedimento, valores_normalizados):
     """
     Obtém o valor associado a um procedimento, usando sinônimos ou similaridade.
 
     Args:
         procedimento (str): Nome do exame a buscar.
-        valores (dict): Dicionário com nomes de exames e seus respectivos valores.
+        valores_normalizados (dict): Dicionário com nomes de exames normalizados como chaves
+                                     e seus respectivos valores como valores.
 
     Returns:
         str: Valor encontrado (ex: "R$ 45,00") ou string vazia se não encontrado.
@@ -148,19 +169,19 @@ def get_valor_by_procedimento(procedimento, valores):
     procedimento_norm = normalizar(procedimento)
 
     if procedimento_norm in SINONIMOS:
-        sinonimo = SINONIMOS[procedimento_norm]
-        if sinonimo in valores:
-            valor = valores[sinonimo]
-            print(f"Match via sinônimo: {procedimento_norm} → {sinonimo} → {valor}")
+        sinonimo_norm = normalizar(SINONIMOS[procedimento_norm])
+        if sinonimo_norm in valores_normalizados:
+            valor = valores_normalizados[sinonimo_norm]
+            print(f"Match via sinônimo: {procedimento_norm} → {SINONIMOS[procedimento_norm]} → {valor}")
             return valor
         else:
-            print(f"Sinônimo '{sinonimo}' não encontrado em valores: {list(valores.keys())}")
+            print(f"Sinônimo '{SINONIMOS[procedimento_norm]}' não encontrado em valores: {list(valores_normalizados.keys())}")
 
-    candidatos = difflib.get_close_matches(procedimento_norm, valores.keys(), n=1, cutoff=0.6)
+    candidatos = difflib.get_close_matches(procedimento_norm, valores_normalizados.keys(), n=1, cutoff=0.6)
 
     if candidatos:
         match = candidatos[0]
-        valor = valores[match]
+        valor = valores_normalizados[match]
         print(f"Match por similaridade: {procedimento_norm} → {match} → {valor}")
         return valor
     else:
