@@ -22,20 +22,51 @@ import unicodedata
 TAMANHO_ESPERADO = (841.92, 1191.12)
 
 SINONIMOS = {
+    # ALT / TGP
     "alt": "transaminase piruvica - alt",
     "tgp": "transaminase piruvica - alt",
     "alt tgp": "transaminase piruvica - alt",
+    "tgp alt": "transaminase piruvica - alt",
+    "transaminase piruvica": "transaminase piruvica - alt",
+    "alt (tgp)": "transaminase piruvica - alt",
+    "a.l.t. (tgp)": "transaminase piruvica - alt",
+
+    # AST / GOT
     "ast": "transaminase oxalacetica - ast",
     "got": "transaminase oxalacetica - ast",
+    "transaminase oxalacetica": "transaminase oxalacetica - ast",
+
+    # GGT
     "gama gt": "ggt - gama glutamil transferase",
     "ggt": "ggt - gama glutamil transferase",
+    "gama glutamil transferase": "ggt - gama glutamil transferase",
+    "gama gt (ggt)": "ggt - gama glutamil transferase",
+
+    # Básicos
     "ureia": "ureia",
     "creatinina": "creatinina",
     "colesterol": "colesterol total",
+    "colesterol total": "colesterol total",
     "triglicerideos": "triglicerides",
+    "triglicerídeos": "triglicerides",
+    "triglicerides": "triglicerides",
+
+    # Fosfatase alcalina
     "fosfatase": "fosfatase alcalina",
+    "fosfatase alcalina": "fosfatase alcalina",
+
+    # Proteínas
+    "proteinas totais": "proteinas totais",
+    "proteínas totais": "proteinas totais",
+
+    # Albumina
+    "albumina": "albumina",
+
+    # Diversos
     "raspado de pele": "raspado pele",
+    "raspado pele": "raspado pele",
     "hemoparasitas": "pesquisa hematozoarios",
+    "pesquisa hemoparasitas": "pesquisa hematozoarios",
 }
 
 
