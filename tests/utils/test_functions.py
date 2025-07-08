@@ -1,6 +1,5 @@
 from utils import functions
 
-
 def test_normalizar():
     assert functions.normalizar("  ÁçÊ!@# texto ") == "ace texto"
 
@@ -16,18 +15,18 @@ def test_calcula_total():
 
 
 def test_get_valor_by_procedimento_match_exato():
-    valores = {"hemograma": "R$ 25,00"}
+    valores = functions.normalizar_valores({"hemograma": "R$ 25,00"})
     val = functions.get_valor_by_procedimento("Hemograma", valores)
     assert val == "R$ 25,00"
 
 
 def test_get_valor_by_procedimento_sinonimo():
-    valores = {"transaminase piruvica - alt": "R$ 50,00"}
+    valores = functions.normalizar_valores({"transaminase piruvica - alt": "R$ 50,00"})
     val = functions.get_valor_by_procedimento("ALT", valores)
     assert val == "R$ 50,00"
 
 
 def test_get_valor_by_procedimento_invalido():
-    valores = {"hemograma": "R$ 25,00"}
+    valores = functions.normalizar_valores({"hemograma": "R$ 25,00"})
     val = functions.get_valor_by_procedimento("Exame inexistente", valores)
     assert val == ""

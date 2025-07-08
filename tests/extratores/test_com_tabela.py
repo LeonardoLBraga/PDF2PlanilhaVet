@@ -1,4 +1,5 @@
 from extratores.com_tabela import ExtratorComTabela
+from utils import functions
 
 class FakePagina:
     def __init__(self, tabelas):
@@ -29,17 +30,17 @@ def test_extrator_com_tabela():
         ["ALT", ""]
     ])
 
-    valores = {
+    valores = functions.normalizar_valores({
         "hemograma": "R$ 30,00",
         "transaminase piruvica - alt": "R$ 50,00"
-    }
+    })
 
     extrator = ExtratorComTabela()
     linhas = extrator.extrair(pagina, valores)
 
     assert isinstance(linhas, list)
     assert len(linhas) == 2
-    assert linhas[0]['Exames'] == 'Hemograma - João da Silva'
+    assert linhas[0]['Exames'] == 'hemograma - João da Silva'
     assert linhas[0]['Valor'] == 'R$ 30,00'
-    assert linhas[1]['Exames'] == 'ALT - João da Silva'
+    assert linhas[1]['Exames'] == 'alt - João da Silva'
     assert linhas[1]['Valor'] == 'R$ 50,00'
