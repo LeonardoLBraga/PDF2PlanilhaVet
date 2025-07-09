@@ -1,5 +1,7 @@
 # 🐾 PDF2PlanilhaVet
 
+![CI](https://github.com/leonardolbraga/PDF2PlanilhaVet/actions/workflows/ci.yml/badge.svg)
+
 **PDF2PlanilhaVet** é uma ferramenta em Python que automatiza a extração de dados de exames veterinários em PDF e gera uma planilha Excel estruturada, facilitando o controle financeiro e o arquivamento.
 
 ---
